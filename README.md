@@ -1,12 +1,12 @@
-# AriaAI
+# ZyraNovaAI
 Production-grade AI Assistant built with Python, Groq &amp; LLaMA 3
 
-# AriaAI 🤖
+# ZyraNovaAI 🤖
 
 > A production-grade AI Assistant built with Python, Groq & LLaMA 3
 
-## What is AriaAI?
-AriaAI is an intelligent AI assistant capable of multi-turn 
+## What is ZyraNovaAI?
+ZyraNovaAI is an intelligent AI assistant capable of multi-turn 
 conversations, prompt engineering, and context-aware responses. 
 Built as part of a full AI Engineering journey from basics to 
 production deployment.
@@ -33,20 +33,27 @@ ai-aria/
 ├── .env.example             # Environment template
 └── README.md                # You are here
 
-## Setup
-1. Clone this repo
-git clone https://github.com/YOURUSERNAME/AriaAI.git
+## ⚙️ Setup Instructions
 
-2. Create virtual environment
+### 1. Clone the repository
+```bash
+git clone https://github.com/siddharth3805/ZyraNovaAI.git
+cd AriaAI
+```
+
+### 2. Create virtual environment
+```bash
 python -m venv venv
 venv\Scripts\activate
+```
 
-3. Install dependencies
+### 3. Install dependencies
+```bash
 pip install -r requirements.txt
+```
 
-4. Add your API keys
-Create .env file:
-GROQ_API_KEY=your_groq_key_here
+### 4. Set up environment variables
+Create a `.env` file:
 
 5. Run
 python main.py
