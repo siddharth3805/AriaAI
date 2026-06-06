@@ -1,7 +1,5 @@
 import streamlit as st
-from langchain_groq import ChatGroq
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_core.output_parsers import StrOutputParser
+from groq import Groq
 from langchain_core.messages import HumanMessage, AIMessage
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -26,42 +24,14 @@ st.divider()
 
 # ── AI SETUP ──────────────────────────────────────
 @st.cache_resource
-def load_model():
-    # Try Streamlit secrets first, then .env
+def load_client():
     try:
         api_key = st.secrets["GROQ_API_KEY"]
     except:
         api_key = os.getenv("GROQ_API_KEY")
+    return Groq(api_key=api_key)
 
-    return ChatGroq(
-        api_key=api_key,
-        model="llama-3.1-8b-instant",
-        temperature=0.7,
-        max_tokens=500
-    )
-
-model = load_model()
-parser = StrOutputParser()
-
-# ── PROMPTS ───────────────────────────────────────
-chat_prompt = ChatPromptTemplate.from_messages([
-    ("system", """You are Zyra, an elite AI assistant.
-Be helpful, concise, and friendly.
-If a PDF context is provided, answer from it.
-Otherwise answer from your knowledge."""),
-    MessagesPlaceholder(variable_name="history"),
-    ("human", "{input}")
-])
-
-rag_prompt = ChatPromptTemplate.from_messages([
-    ("system", """You are Zyra. Answer using ONLY this document context:
-{context}
-If answer not in context say: 'This is not in the document.'"""),
-    ("human", "{question}")
-])
-
-chat_chain = chat_prompt | model | parser
-rag_chain = rag_prompt | model | parser
+client = load_client()
 
 # ── SESSION STATE ─────────────────────────────────
 if "messages" not in st.session_state:
@@ -75,6 +45,38 @@ if "pdf_collection" not in st.session_state:
 
 if "pdf_name" not in st.session_state:
     st.session_state.pdf_name = None
+
+# ── CHAT FUNCTION ─────────────────────────────────
+def get_response(user_input, context=None):
+    if context:
+        system = f"""You are Zyra, an intelligent AI assistant.
+Answer using ONLY this document context:
+{context}
+If answer not in context say: 'This is not in the document.'"""
+    else:
+        system = """You are Zyra, an elite AI assistant.
+Be helpful, concise, and friendly."""
+
+    # Build messages
+    messages = [{"role": "system", "content": system}]
+
+    # Add history
+    for msg in st.session_state.chat_history:
+        if isinstance(msg, HumanMessage):
+            messages.append({"role": "user", "content": msg.content})
+        else:
+            messages.append({"role": "assistant", "content": msg.content})
+
+    # Add current message
+    messages.append({"role": "user", "content": user_input})
+
+    response = client.chat.completions.create(
+        model="llama-3.1-8b-instant",
+        messages=messages,
+        max_tokens=500,
+        temperature=0.7
+    )
+    return response.choices[0].message.content
 
 # ── SIDEBAR ───────────────────────────────────────
 with st.sidebar:
@@ -103,12 +105,12 @@ with st.sidebar:
                 )
                 chunks = splitter.split_documents(pages)
 
-                client = chromadb.Client()
+                chroma_client = chromadb.Client()
                 try:
-                    client.delete_collection("pdf_upload")
+                    chroma_client.delete_collection("pdf_upload")
                 except:
                     pass
-                collection = client.create_collection("pdf_upload")
+                collection = chroma_client.create_collection("pdf_upload")
                 collection.add(
                     documents=[c.page_content for c in chunks],
                     ids=[f"c_{i}" for i in range(len(chunks))]
@@ -135,7 +137,7 @@ with st.sidebar:
         st.session_state.chat_history = []
         st.rerun()
 
-    st.caption("Built with LangChain + Groq + Streamlit | ZyraNovaAI")
+    st.caption("Built with Groq + Streamlit | ZyraNovaAI")
 
 # ── CHAT HISTORY DISPLAY ──────────────────────────
 for message in st.session_state.messages:
@@ -159,18 +161,10 @@ if prompt := st.chat_input("Ask Zyra anything..."):
                     query_texts=[prompt],
                     n_results=3
                 )
-                context = "\n\n".join(
-                    results['documents'][0]
-                )
-                response = rag_chain.invoke({
-                    "question": prompt,
-                    "context": context
-                })
+                context = "\n\n".join(results['documents'][0])
+                response = get_response(prompt, context=context)
             else:
-                response = chat_chain.invoke({
-                    "input": prompt,
-                    "history": st.session_state.chat_history
-                })
+                response = get_response(prompt)
 
             st.markdown(response)
 
