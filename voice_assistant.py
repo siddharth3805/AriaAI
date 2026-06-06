@@ -22,7 +22,7 @@ tts_engine.setProperty('rate', 175)      # speaking speed
 tts_engine.setProperty('volume', 0.9)    # volume
 
 def speak(text):
-    print(f"Aria: {text}")
+    print(f"ZyraNova: {text}")
     tts_engine.say(text)
     tts_engine.runAndWait()
 
@@ -77,7 +77,7 @@ def transcribe(audio_file):
 conversation_history = [
     {
         "role": "system",
-        "content": "You are Aria, a helpful voice AI assistant. Keep responses short and conversational — max 2-3 sentences. You are being used as a voice assistant so avoid bullet points and long lists."
+        "content": "You are ZyraNova, a helpful voice AI assistant. Keep responses short and conversational — max 2-3 sentences. You are being used as a voice assistant so avoid bullet points and long lists."
     }
 ]
 
@@ -106,9 +106,9 @@ def get_ai_response(user_text):
 # ── 6. FULL VOICE PIPELINE ────────────────────────
 def voice_pipeline():
     print("=" * 50)
-    print("     AriaAI — Voice Assistant")
+    print("     ZyraNovaAI — Voice Assistant")
     print("=" * 50)
-    speak("Hello! I am Aria, your AI voice assistant. How can I help you?")
+    speak("Hello! I am ZyraNova, your AI voice assistant. How can I help you?")
 
     while True:
         print("\nPress ENTER to speak or type 'quit' to exit...")

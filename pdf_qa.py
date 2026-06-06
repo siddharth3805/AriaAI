@@ -67,7 +67,7 @@ def store_in_chromadb(chunks, collection_name="pdf_knowledge"):
 
 # ── 5. RAG PROMPT ─────────────────────────────────
 pdf_prompt = ChatPromptTemplate.from_messages([
-    ("system", """You are Aria, an AI assistant that answers questions from documents.
+    ("system", """You are ZyraNova, an AI assistant that answers questions from documents.
 Use ONLY the provided context to answer.
 If the answer is not in the context, say "This information is not in the document."
 Always be accurate and cite relevant details from the context.
@@ -103,7 +103,7 @@ def answer_question(collection, question):
 # ── 7. MAIN PDF QA SYSTEM ─────────────────────────
 def run_pdf_qa(pdf_path):
     print("=" * 50)
-    print("     AriaAI — PDF Question Answering")
+    print("     ZyraNovaAI — PDF Question Answering")
     print("=" * 50 + "\n")
 
     # Load and process PDF

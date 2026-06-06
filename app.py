@@ -23,7 +23,7 @@ model = ChatGroq(
 parser = StrOutputParser()
 
 prompt = ChatPromptTemplate.from_messages([
-    ("system", """You are Aria, an elite AI assistant.
+    ("system", """You are ZyraNova, an elite AI assistant.
 Be helpful, concise, and friendly.
 Always give practical and clear responses."""),
     MessagesPlaceholder(variable_name="history"),
@@ -48,7 +48,7 @@ def get_history(session_id):
 def home():
     return jsonify({
         "status": "running",
-        "message": "AriaAI API is live!",
+        "message": "ZyraNovaAI API is live!",
         "endpoints": ["/chat", "/clear", "/history"]
     })
 

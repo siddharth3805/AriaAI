@@ -41,17 +41,17 @@ def chat(user_message):
     return ai_reply
 
 # Start chatting
-print("Aria is ready! Type 'quit' to exit.\n")
+print("ZyraNova is ready! Type 'quit' to exit.\n")
 
 while True:
     user_input = input("You: ")
 
     if user_input.lower() == "quit":
-        print("Aria: Goodbye! Keep building!")
+        print("ZyraNova: Goodbye! Keep building!")
         break
 
     if user_input.strip() == "":
         continue
 
     response = chat(user_input)
-    print(f"\nAria: {response}\n")
+    print(f"\nZyraNova: {response}\n")

@@ -14,13 +14,13 @@ load_dotenv()
 
 # ── PAGE CONFIG ───────────────────────────────────
 st.set_page_config(
-    page_title="AriaAI",
+    page_title="ZyraNovaAI",
     page_icon="🤖",
     layout="centered"
 )
 
 # ── HEADER ────────────────────────────────────────
-st.title("🤖 AriaAI")
+st.title("🤖 ZyraNovaAI")
 st.caption("Your intelligent AI assistant — chat or upload a PDF")
 st.divider()
 
@@ -39,7 +39,7 @@ parser = StrOutputParser()
 
 # ── PROMPTS ───────────────────────────────────────
 chat_prompt = ChatPromptTemplate.from_messages([
-    ("system", """You are Aria, an elite AI assistant.
+    ("system", """You are Zyra, an elite AI assistant.
 Be helpful, concise, and friendly.
 If a PDF context is provided, answer from it.
 Otherwise answer from your knowledge."""),
@@ -48,7 +48,7 @@ Otherwise answer from your knowledge."""),
 ])
 
 rag_prompt = ChatPromptTemplate.from_messages([
-    ("system", """You are Aria. Answer using ONLY this document context:
+    ("system", """You are Zyra. Answer using ONLY this document context:
 {context}
 If answer not in context say: 'This is not in the document.'"""),
     ("human", "{question}")
@@ -83,14 +83,12 @@ with st.sidebar:
     if uploaded_file:
         if st.session_state.pdf_name != uploaded_file.name:
             with st.spinner("Processing PDF..."):
-                # Save temp file
                 with tempfile.NamedTemporaryFile(
                     delete=False, suffix=".pdf"
                 ) as tmp:
                     tmp.write(uploaded_file.read())
                     tmp_path = tmp.name
 
-                # Load and chunk
                 loader = PyPDFLoader(tmp_path)
                 pages = loader.load()
                 splitter = RecursiveCharacterTextSplitter(
@@ -99,7 +97,6 @@ with st.sidebar:
                 )
                 chunks = splitter.split_documents(pages)
 
-                # Store in ChromaDB
                 client = chromadb.Client()
                 try:
                     client.delete_collection("pdf_upload")
@@ -132,7 +129,7 @@ with st.sidebar:
         st.session_state.chat_history = []
         st.rerun()
 
-    st.caption("Built with LangChain + Groq + Streamlit")
+    st.caption("Built with LangChain + Groq + Streamlit | ZyraNovaAI")
 
 # ── CHAT HISTORY DISPLAY ──────────────────────────
 for message in st.session_state.messages:
@@ -140,9 +137,8 @@ for message in st.session_state.messages:
         st.markdown(message["content"])
 
 # ── CHAT INPUT ────────────────────────────────────
-if prompt := st.chat_input("Ask Aria anything..."):
+if prompt := st.chat_input("Ask Zyra anything..."):
 
-    # Show user message
     st.session_state.messages.append({
         "role": "user",
         "content": prompt
@@ -150,11 +146,8 @@ if prompt := st.chat_input("Ask Aria anything..."):
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    # Generate response
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
-
-            # PDF mode or normal mode
             if st.session_state.pdf_collection:
                 results = st.session_state.pdf_collection.query(
                     query_texts=[prompt],
@@ -175,7 +168,6 @@ if prompt := st.chat_input("Ask Aria anything..."):
 
             st.markdown(response)
 
-    # Save to history
     st.session_state.messages.append({
         "role": "assistant",
         "content": response
