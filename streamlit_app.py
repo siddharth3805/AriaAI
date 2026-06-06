@@ -2,7 +2,7 @@ import streamlit as st
 from groq import Groq
 from langchain_core.messages import HumanMessage, AIMessage
 from langchain_community.document_loaders import PyPDFLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 import chromadb
 from dotenv import load_dotenv
 import tempfile
