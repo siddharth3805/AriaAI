@@ -1,77 +1,96 @@
-# ZyraNovaAI
-Production-grade AI Assistant built with Python, Groq &amp; LLaMA 3
+Get free Groq API key at: https://console.groq.com
 
-# ZyraNovaAI 🤖
+### 5. Run the app
 
-> A production-grade AI Assistant built with Python, Groq & LLaMA 3
-
-## What is ZyraNovaAI?
-ZyraNovaAI is an intelligent AI assistant capable of multi-turn 
-conversations, prompt engineering, and context-aware responses. 
-Built as part of a full AI Engineering journey from basics to 
-production deployment.
-
-## Features
-- Real-time AI conversations powered by LLaMA 3
-- 6 Prompt Engineering techniques implemented
-- Persistent conversation memory
-- Clean modular Python architecture
-
-## Tech Stack
-| Technology | Purpose |
-|---|---|
-| Python 3.x | Core language |
-| Groq API | LLM inference engine |
-| LLaMA 3 | AI model |
-| python-dotenv | Secure key management |
-
-## Project Structure
-ai-aria/
-├── main.py                  # Python basics & practice
-├── prompt_engineering.py    # 6 prompt techniques
-├── requirements.txt         # Dependencies
-├── .env.example             # Environment template
-└── README.md                # You are here
-
-## ⚙️ Setup Instructions
-
-### 1. Clone the repository
+**Streamlit UI (recommended):**
 ```bash
-git clone https://github.com/siddharth3805/ZyraNovaAI.git
-cd AriaAI
+streamlit run streamlit_app.py
 ```
 
-### 2. Create virtual environment
+**Flask API:**
 ```bash
-python -m venv venv
-venv\Scripts\activate
+python app.py
 ```
 
-### 3. Install dependencies
+**Memory Chatbot:**
 ```bash
-pip install -r requirements.txt
+python zyra_chatbot.py
 ```
 
-### 4. Set up environment variables
-Create a `.env` file:
-
-5. Run
-python main.py
-
-## Roadmap
-- [x] Python for AI fundamentals
-- [x] Groq API integration
-- [x] Memory chatbot
-- [x] Prompt engineering (6 techniques)
-- [ ] LangChain integration
-- [ ] RAG pipeline
-- [ ] PDF Question Answering
-- [ ] Voice Assistant
-- [ ] Flask API deployment
-
-## Author
-**Siddharth** — AI Engineering Student
-Building toward production-grade AI systems
+**Voice Assistant:**
+```bash
+python voice_assistant.py
+```
 
 ---
-⭐ Star this repo if you find it useful!
+
+## 🔌 API Endpoints
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/` | Health check |
+| POST | `/chat` | Send message, get response |
+| POST | `/clear` | Clear conversation history |
+| GET | `/history` | View conversation history |
+
+### Example API call:
+```python
+import requests
+
+response = requests.post(
+    "http://localhost:5000/chat",
+    json={
+        "message": "What is machine learning?",
+        "session_id": "user123"
+    }
+)
+print(response.json())
+```
+
+---
+
+## 🧠 AI Concepts Implemented
+
+- **Prompt Engineering** — 6 techniques including CoT, Few-shot, Role prompting
+- **RAG** — Retrieval Augmented Generation with vector similarity search
+- **Embeddings** — Sentence transformers converting text to 384-dimensional vectors
+- **Memory** — Conversation history management across sessions
+- **Voice AI** — Speech-to-text with Whisper, text-to-speech with pyttsx3
+- **LangChain LCEL** — Prompt | Model | Parser pipeline
+
+---
+
+## 📊 Roadmap
+
+-  Python for AI fundamentals
+-  Groq API integration
+-  Memory chatbot
+-  Prompt engineering (6 techniques)
+-  LangChain integration
+-  RAG pipeline
+-  PDF Question Answering
+-  Voice Assistant
+-  Flask REST API
+-  Streamlit Web UI
+-  Deploy on Streamlit Cloud
+-  Multi-document RAG
+-  Agent system
+
+---
+
+## 👨‍💻 Author
+
+**Siddharth Sonawane**
+- AI Engineering Student
+- Building production-grade AI systems
+- GitHub: [@siddharth3805](https://github.com/siddharth3805)
+
+---
+
+## ⭐ Show your support
+
+Give a ⭐ if this project helped you learn AI engineering!
+
+---
+
+*Built with ❤️ using Python, Groq, LangChain, and Streamlit*
