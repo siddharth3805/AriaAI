@@ -27,8 +27,14 @@ st.divider()
 # ── AI SETUP ──────────────────────────────────────
 @st.cache_resource
 def load_model():
+    # Try Streamlit secrets first, then .env
+    try:
+        api_key = st.secrets["GROQ_API_KEY"]
+    except:
+        api_key = os.getenv("GROQ_API_KEY")
+
     return ChatGroq(
-        api_key=os.getenv("GROQ_API_KEY"),
+        api_key=api_key,
         model="llama-3.1-8b-instant",
         temperature=0.7,
         max_tokens=500
